@@ -122,6 +122,7 @@
   .footer-meta{font-size:12px;color:var(--text-muted);}
   .footer-copy{font-size:12px;color:var(--text-muted);}
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -322,6 +323,11 @@ const Q = [
   {id:149,cat:'semi',type:'tf',text:'تعتبر ذرة الجاليوم (Ga) ذرة مانحة عند إضافتها لبلورة السيليكون.',ans:false,exp:'خطأ — الجاليوم ثلاثي التكافؤ وهو ذرة قابلة (مستقبلة) تُنتج النوع p، وليست مانحة.'},
   {id:150,cat:'mag',type:'tf',text:'وحدة قياس شدة المجال المغناطيسي في النظام الدولي هي التسلا (T).',ans:true,exp:'صح — وحدة شدة المجال المغناطيسي B هي التسلا (T) = N/(A·m).'},
   {id:151,cat:'mag',type:'tf',text:'لتحويل الجلفانومتر إلى أميتر، يتم توصيل مقاومة كبيرة جداً معه على التوالي.',ans:false,exp:'خطأ — لتحويل الجلفانومتر إلى أميتر تُوصل مقاومة صغيرة جداً (شنت) معه على التوازي.'},
+  {id:152,cat:'em',type:'tf',text:'وجد العالم جوزيف هنري أن تغير المجال المغناطيسي يمكن أن يولد تياراً كهربائياً في نفس السنة التي اكتشف فيها فاراداي ذلك.',ans:true,exp:'صح — هنري اكتشف الحث الكهرومغناطيسي بشكل مستقل في نفس الفترة.'},
+  {id:153,cat:'semi',type:'tf',text:'نموذج (إلكترون-غاز) يصف حركة الإلكترونات في الموصلات الفلزية.',ans:true,exp:'صح — نموذج الإلكترون-غاز يفسر حركة الإلكترونات الحرة في الفلزات.'},
+  {id:154,cat:'nuc',type:'tf',text:'تحتاج تفاعلات الاندماج النووي إلى درجات حرارة منخفضة جداً لكي تحدث.',ans:false,exp:'خطأ — الاندماج النووي يحتاج إلى درجات حرارة عالية جداً (ملايين الدرجات) للتغلب على التنافر الكهروستاتيكي.'},
+  {id:155,cat:'semi',type:'tf',text:'تعمل المجسات الحرارية (Thermistors) المصنوعة من أشباه الموصلات على زيادة مقاومتها عند ارتفاع درجة الحرارة.',ans:false,exp:'خطأ — المجسات الحرارية من أشباه الموصلات تقل مقاومتها عند ارتفاع درجة الحرارة (معامل درجة الحرارة سالب).'},
+  {id:156,cat:'nuc',type:'tf',text:'القوة النووية الضعيفة هي المسؤولة عن اضمحلال بيتا داخل النواة.',ans:true,exp:'صح — القوة النووية الضعيفة تسبب تحول النيوترون إلى بروتون أو العكس (اضمحلال بيتا).'},
 ];
 
 let answered = {};
@@ -386,7 +392,7 @@ function renderPage() {
   let globalIdx = start;
   Object.keys(sections).forEach(cat => {
     const sh = document.createElement('div');
-    sh.innerHTML = `<div class="section-head"><div class="section-head-line"></div><div class="section-head-title">${catLabels[cat]||cat}</div><div class="section-head-line"></div></div>`;
+    sh.innerHTML = <div class="section-head"><div class="section-head-line"></div><div class="section-head-title">${catLabels[cat]||cat}</div><div class="section-head-line"></div></div>;
     container.appendChild(sh);
     sections[cat].forEach(q => {
       globalIdx++;
@@ -403,7 +409,7 @@ function renderPage() {
             if (i===q.ans) cls += ' correct-ans';
             else if (answered[q.id+'_sel']===i && i!==q.ans) cls += ' wrong-ans';
           }
-          bodyHtml += `<button class="${cls}" onclick="answerMC(${q.id},${i},${q.ans})" ${state?'disabled':''}>${opt}</button>`;
+          bodyHtml += <button class="${cls}" onclick="answerMC(${q.id},${i},${q.ans})" ${state?'disabled':''}>${opt}</button>;
         });
         bodyHtml += '</div>';
       } else {
@@ -412,19 +418,19 @@ function renderPage() {
           if (q.ans===true) { tcls+=' correct-ans'; fcls+=' wrong-ans'; }
           else { fcls+=' correct-ans'; tcls+=' wrong-ans'; }
         }
-        bodyHtml = `<div class="tf-row">
+        bodyHtml = <div class="tf-row">
           <button class="${tcls}" onclick="answerTF(${q.id},true,${q.ans})" ${state?'disabled':''}>✓ صح</button>
           <button class="${fcls}" onclick="answerTF(${q.id},false,${q.ans})" ${state?'disabled':''}>✗ خطأ</button>
-        </div>`;
+        </div>;
       }
       let expHtml = '';
       if (state) {
         const ok = state==='correct';
-        expHtml = `<div class="explanation ${ok?'ok':'bad'}"><strong>${ok?'✓ ممتاز!':'✗ الإجابة الصحيحة:'}</strong> ${q.exp}</div>`;
+        expHtml = <div class="explanation ${ok?'ok':'bad'}"><strong>${ok?'✓ ممتاز!':'✗ الإجابة الصحيحة:'}</strong> ${q.exp}</div>;
       }
       const wrap = document.createElement('div');
       wrap.className = 'q-wrap';
-      wrap.innerHTML = `<div class="q-card ${cardClass}">
+      wrap.innerHTML = <div class="q-card ${cardClass}">
         <div class="q-meta">
           <span class="badge ${catBadge[q.cat]||'b-mc'}">${catLabels[q.cat]||q.cat}</span>
           <span class="badge ${typeBadge}">${typeLabel}</span>
@@ -432,18 +438,18 @@ function renderPage() {
         </div>
         <div class="q-text">${q.text}</div>
         ${bodyHtml}${expHtml}
-      </div>`;
+      </div>;
       container.appendChild(wrap);
     });
   });
 
   // pagination
-  document.getElementById('page-info').textContent = `الأسئلة ${start+1}–${Math.min(start+PAGE_SIZE,allQs.length)} من ${allQs.length} | الجزء ${currentPage+1} من ${totalPages}`;
-  document.getElementById('pag-bottom').innerHTML = `
+  document.getElementById('page-info').textContent = الأسئلة ${start+1}–${Math.min(start+PAGE_SIZE,allQs.length)} من ${allQs.length} | الجزء ${currentPage+1} من ${totalPages};
+  document.getElementById('pag-bottom').innerHTML = 
     <button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===0?'disabled':''}>→ السابق</button>
     <span class="page-num">${currentPage+1} / ${totalPages}</span>
     <button class="page-btn primary" onclick="goPage(${currentPage+1})" ${currentPage>=totalPages-1?'disabled':''}>التالي ←</button>
-  `;
+  ;
   updateStats();
 }
 
@@ -490,4 +496,4 @@ renderPage();
 <script data-goatcounter="https://h3i2bownw.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>
-</html>
+    </html>
