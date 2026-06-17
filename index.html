@@ -113,15 +113,6 @@
   .share-box .sh-title{font-size:17px;font-weight:700;color:var(--purple-main);display:block;margin-bottom:8px;}
   .share-box p{font-size:15px;color:var(--text-sub);line-height:1.8;}
 
-  .comments-section{margin:0 16px 24px;background:var(--surface);border:1px solid var(--purple-pale);border-radius:var(--radius);padding:22px 20px;}
-  .comments-title{font-size:16px;font-weight:700;color:var(--purple-main);margin-bottom:14px;}
-  .comment-input{width:100%;padding:12px 15px;border-radius:var(--radius-sm);border:1.5px solid var(--purple-pale);background:var(--surface-2);font-family:'Tajawal',sans-serif;font-size:14px;color:var(--text-main);resize:vertical;min-height:80px;outline:none;transition:border-color 0.2s;display:block;margin-bottom:10px;}
-  .comment-input:focus{border-color:var(--purple-soft);}
-  .comment-submit{padding:10px 26px;border-radius:var(--radius-sm);border:none;background:var(--purple-main);color:#fff;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background 0.18s;}
-  .comment-submit:hover{background:var(--purple-deep);}
-  .comments-list{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
-  .comment-item{background:var(--purple-bg);border:1px solid var(--purple-pale);border-radius:var(--radius-sm);padding:12px 14px;font-size:14px;line-height:1.6;}
-  .comment-time{font-size:11px;color:var(--text-muted);margin-top:4px;}
 
   .footer{border-top:1px solid var(--purple-pale);margin-top:8px;padding:28px 16px 40px;text-align:center;}
   .footer-inner{display:flex;flex-direction:column;align-items:center;gap:6px;}
@@ -188,13 +179,6 @@
   <p>إذا شفت إنها مفيدة شاركها مع أصحابك، يمكن تكون سبب في نجاحك بإذن الله ✨</p>
 </div>
 
-<div class="comments-section">
-  <div class="comments-title">💬 شاركنا رأيك في الاختبار</div>
-  <textarea class="comment-input" id="comment-text" placeholder="اكتب لي رايك في الاختبار..."></textarea>
-  <button class="comment-submit" onclick="submitComment()">إرسال التعليق</button>
-  <div class="comments-list" id="comments-list"></div>
-</div>
-
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-credit">إعداد وتصميم: <a href="https://www.instagram.com/sw7dx" target="_blank" rel="noopener">@sw7dx</a></div>
@@ -209,7 +193,7 @@ const Q = [
   // ══ اختيار من متعدد ══
   {id:1,cat:'em',type:'mc',text:'العالم الذي اكتشف أن المجال المغناطيسي المتغير يولد تياراً كهربائياً هو:',opts:['أورستد','مايكل فاراداي','كولوم','نيوتن'],ans:1,exp:'مايكل فاراداي اكتشف ظاهرة الحث الكهرومغناطيسي عام 1831م وصاغ قانونها.'},
   {id:2,cat:'em',type:'mc',text:'تتولد أكبر قيمة للقوة الدافعة الكهربائية الحثية FME عندما يتحرك السلك في المجال المغناطيسي بزاوية مقدارها:',opts:['صفر','45°','90°','180°'],ans:2,exp:'أكبر قيمة للقوة الدافعة الحثية تكون عندما يكون السلك عمودياً على المجال (90°).'},
-  {id:3,cat:'em',type:'mc',text:'يتحرك سلك مستقيم طوله 2.0m بسرعة 3.0 m/s عمودياً على مجال مغناطيسي شدته 0.5T، فإن مقدار القوة الدافعة الكهربائية الحثية المتولدة يساوي:',opts:['V 1.5','V 3.0','V 0.33','V 6.0'],ans:0,exp:'FME = BLv = 0.5 × 2.0 × 3.0 = 3.0V، الإجابة الصحيحة V 3.0.'},
+  {id:3,cat:'em',type:'mc',text:'يتحرك سلك مستقيم طوله 2.0m بسرعة 3.0 m/s عمودياً على مجال مغناطيسي شدته 0.5T، فإن مقدار القوة الدافعة الكهربائية الحثية المتولدة يساوي:',opts:['V 1.5','V 3.0','V 0.33','V 6.0'],ans:1,exp:'FME = BLv = 0.5 × 2.0 × 3.0 = 3.0V، الإجابة الصحيحة V 3.0.'},
   {id:4,cat:'em',type:'mc',text:'جهاز يعمل على تحويل الطاقة الميكانيكية إلى طاقة كهربائية:',opts:['المحرك الكهربائي','المولد الكهربائي','الجلفانومتر','المكثف'],ans:1,exp:'المولد الكهربائي يحول الطاقة الميكانيكية إلى كهربائية — عكس المحرك.'},
   {id:5,cat:'em',type:'mc',text:'ما الكمية التي تمكن تومسون من حسابها باستخدام أنبوب الأشعة المهبطية؟',opts:['شحنة الإلكترون فقط','كتلة الإلكترون فقط','نسبة شحنة الإلكترون إلى كتلته q/m','سرعة الإلكترون في الفراغ'],ans:2,exp:'تومسون حدّد نسبة q/m للإلكترون — وهذا كان اكتشافاً ثورياً.'},
   {id:6,cat:'em',type:'mc',text:'في تجربة تومسون، عندما تتحرك الإلكترونات في مسار مستقيم دون انحراف، فإن العلاقة بين سرعة الإلكترون v والمجالين E و B هي:',opts:['B/E = v','E/B = v','B×E = v','B×E² = v'],ans:1,exp:'عند التوازن: qE = qvB، إذاً v = E/B.'},
@@ -343,7 +327,6 @@ const Q = [
 let answered = {};
 let curFilter = 'all';
 let currentPage = 0;
-let comments = [];
 
 function getFiltered() {
   return curFilter === 'all' ? Q : Q.filter(q => q.cat === curFilter);
@@ -499,21 +482,6 @@ function resetAll() {
   currentPage = 0;
   window.scrollTo({top:0,behavior:'smooth'});
   renderPage();
-}
-
-function submitComment() {
-  const text = document.getElementById('comment-text').value.trim();
-  if (!text) return;
-  const now = new Date();
-  const t = now.toLocaleDateString('ar-SA') + ' — ' + now.toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'});
-  comments.unshift({text, time: t});
-  document.getElementById('comment-text').value = '';
-  renderComments();
-}
-
-function renderComments() {
-  const list = document.getElementById('comments-list');
-  list.innerHTML = comments.map(c=>`<div class="comment-item">${c.text}<div class="comment-time">${c.time}</div></div>`).join('');
 }
 
 renderPage();
