@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مراجعة تفاعلية — فيزياء ثالث ثانوي</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+  :root {
+    --purple-deep:#2D1B69;--purple-main:#5B3FA0;--purple-mid:#7C5CBF;
+    --purple-soft:#A68DD6;--purple-pale:#E8DEFF;--purple-bg:#F3EEFF;
+    --surface:#FFFFFF;--surface-2:#FAF8FF;--text-main:#1A1035;
+    --text-sub:#5A4E7A;--text-muted:#9287B0;
+    --correct-bg:#E8F8F0;--correct-bd:#34A770;--correct-tx:#1A6644;
+    --wrong-bg:#FEE8E8;--wrong-bd:#E04444;--wrong-tx:#8B1A1A;
+    --radius:14px;--radius-sm:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Tajawal',sans-serif;background:var(--purple-bg);color:var(--text-main);min-height:100vh;}
+
+  .hero{background:linear-gradient(135deg,var(--purple-deep) 0%,var(--purple-main) 60%,var(--purple-mid) 100%);padding:48px 24px 40px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(255,255,255,0.06) 0%,transparent 60%);}
+  .hero-label{display:inline-block;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);font-size:13px;font-weight:500;padding:5px 16px;border-radius:20px;margin-bottom:16px;}
+  .hero h1{font-size:clamp(22px,5vw,34px);font-weight:700;color:#fff;line-height:1.4;margin-bottom:8px;}
+  .hero p{color:rgba(255,255,255,0.75);font-size:15px;margin-bottom:28px;}
+  .hero-stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
+  .hero-stat{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:var(--radius-sm);padding:10px 20px;color:#fff;text-align:center;min-width:90px;}
+  .hero-stat-n{font-size:24px;font-weight:700;}
+  .hero-stat-l{font-size:12px;opacity:0.8;margin-top:2px;}
+
+  .score-panel{background:var(--surface);margin:20px 16px;border-radius:var(--radius);padding:20px;border:1px solid var(--purple-pale);display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;box-shadow:0 2px 16px rgba(91,63,160,0.07);}
+  .sc-item{text-align:center;}
+  .sc-num{font-size:28px;font-weight:700;color:var(--purple-main);}
+  .sc-num.ok{color:var(--correct-bd);}
+  .sc-num.bad{color:var(--wrong-bd);}
+  .sc-label{font-size:12px;color:var(--text-muted);margin-top:3px;}
+
+  .progress-wrap{margin:0 16px 8px;}
+  .progress-bar{height:6px;background:var(--purple-pale);border-radius:3px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--purple-main),var(--purple-soft));border-radius:3px;transition:width 0.4s ease;width:0%;}
+  .progress-txt{font-size:12px;color:var(--text-muted);text-align:right;margin-top:5px;}
+
+  .filters{display:flex;gap:8px;padding:0 16px;margin-bottom:16px;flex-wrap:wrap;}
+  .filter-btn{padding:7px 16px;border-radius:20px;border:1.5px solid var(--purple-pale);background:var(--surface);color:var(--text-sub);font-family:'Tajawal',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.18s;}
+  .filter-btn:hover{border-color:var(--purple-soft);}
+  .filter-btn.active{background:var(--purple-main);color:#fff;border-color:var(--purple-main);}
+
+  .page-info{text-align:center;padding:8px 16px;font-size:14px;color:var(--text-sub);font-weight:600;}
+
+  .section-head{display:flex;align-items:center;gap:10px;padding:0 16px;margin:24px 0 12px;}
+  .section-head-line{flex:1;height:1px;background:var(--purple-pale);}
+  .section-head-title{font-size:14px;font-weight:700;color:var(--purple-main);white-space:nowrap;background:var(--purple-bg);padding:0 10px;}
+
+  .q-wrap{padding:0 16px;margin-bottom:12px;}
+  .q-card{background:var(--surface);border:1.5px solid var(--purple-pale);border-radius:var(--radius);padding:18px 20px;transition:border-color 0.2s,box-shadow 0.2s;box-shadow:0 1px 6px rgba(91,63,160,0.04);}
+  .q-card:hover{box-shadow:0 4px 18px rgba(91,63,160,0.1);}
+  .q-card.correct{border-color:var(--correct-bd);background:var(--correct-bg);}
+  .q-card.wrong{border-color:var(--wrong-bd);background:var(--wrong-bg);}
+  .q-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .q-num{font-size:12px;color:var(--text-muted);font-weight:500;}
+  .badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+  .b-em{background:#EDE4FF;color:#4A2D9C;}
+  .b-mag{background:#DDF2FF;color:#0A5C8A;}
+  .b-wave{background:#FFF3D6;color:#7A5000;}
+  .b-atom{background:#E0F7ED;color:#1A6644;}
+  .b-semi{background:#FFF0E0;color:#7A3800;}
+  .b-nuc{background:#FFE0E0;color:#8B1A1A;}
+  .b-cur{background:#E8E0FF;color:#3D1F8A;}
+  .b-tf{background:#F0F0F0;color:#444;}
+  .b-mc{background:var(--purple-pale);color:var(--purple-deep);}
+  .q-text{font-size:15px;font-weight:500;color:var(--text-main);line-height:1.7;margin-bottom:14px;}
+
+  .opts{display:flex;flex-direction:column;gap:8px;}
+  .opt{padding:10px 15px;border-radius:var(--radius-sm);border:1.5px solid var(--purple-pale);background:var(--surface-2);color:var(--text-main);font-family:'Tajawal',sans-serif;font-size:14px;cursor:pointer;text-align:right;transition:all 0.15s;width:100%;}
+  .opt:hover:not(:disabled){border-color:var(--purple-soft);background:var(--purple-bg);}
+  .opt.correct-ans{border-color:var(--correct-bd);background:var(--correct-bg);color:var(--correct-tx);font-weight:600;}
+  .opt.wrong-ans{border-color:var(--wrong-bd);background:var(--wrong-bg);color:var(--wrong-tx);}
+  .opt:disabled{cursor:default;}
+
+  .tf-row{display:flex;gap:10px;}
+  .tfb{flex:1;padding:11px;border-radius:var(--radius-sm);border:1.5px solid var(--purple-pale);background:var(--surface-2);color:var(--text-main);font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;cursor:pointer;text-align:center;transition:all 0.15s;}
+  .tfb:hover:not(:disabled){border-color:var(--purple-soft);background:var(--purple-bg);}
+  .tfb.correct-ans{border-color:var(--correct-bd);background:var(--correct-bg);color:var(--correct-tx);}
+  .tfb.wrong-ans{border-color:var(--wrong-bd);background:var(--wrong-bg);color:var(--wrong-tx);}
+
+  .explanation{margin-top:12px;padding:11px 14px;font-size:13px;line-height:1.6;border-right:4px solid;border-radius:0 var(--radius-sm) var(--radius-sm) 0;}
+  .explanation.ok{border-color:var(--correct-bd);background:#D4F5E5;color:var(--correct-tx);}
+  .explanation.bad{border-color:var(--wrong-bd);background:#FFD6D6;color:var(--wrong-tx);}
+
+  .pagination{display:flex;justify-content:center;align-items:center;gap:10px;padding:20px 16px;flex-wrap:wrap;}
+  .page-btn{padding:10px 24px;border-radius:var(--radius-sm);border:1.5px solid var(--purple-pale);background:var(--surface);color:var(--purple-main);font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.18s;}
+  .page-btn:hover:not(:disabled){background:var(--purple-main);color:#fff;border-color:var(--purple-main);}
+  .page-btn:disabled{opacity:0.35;cursor:default;}
+  .page-btn.primary{background:var(--purple-main);color:#fff;border-color:var(--purple-main);}
+  .page-num{font-size:14px;color:var(--text-sub);font-weight:600;padding:0 8px;}
+
+  .results-panel{display:none;margin:0 16px 16px;background:var(--surface);border:2px solid var(--purple-pale);border-radius:var(--radius);padding:28px 24px;text-align:center;box-shadow:0 4px 24px rgba(91,63,160,0.1);}
+  .results-panel.show{display:block;}
+  .results-score-big{font-size:56px;font-weight:700;color:var(--purple-main);}
+  .results-label{font-size:16px;color:var(--text-sub);margin:6px 0 20px;}
+  .results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+  .results-item{background:var(--purple-bg);border-radius:var(--radius-sm);padding:14px 10px;}
+  .results-item-n{font-size:26px;font-weight:700;}
+  .results-item-l{font-size:12px;color:var(--text-muted);margin-top:3px;}
+  .results-item.ok .results-item-n{color:var(--correct-bd);}
+  .results-item.bad .results-item-n{color:var(--wrong-bd);}
+
+  .btn-reset{padding:12px 28px;border-radius:var(--radius-sm);border:none;background:var(--purple-main);color:#fff;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:background 0.18s,transform 0.1s;}
+  .btn-reset:hover{background:var(--purple-deep);}
+  .btn-reset:active{transform:scale(0.97);}
+
+  .share-box{margin:0 16px 20px;background:linear-gradient(135deg,#f8f4ff,#eee6ff);border:1px solid var(--purple-pale);border-radius:var(--radius);padding:22px 24px;text-align:center;}
+  .share-box .sh-title{font-size:17px;font-weight:700;color:var(--purple-main);display:block;margin-bottom:8px;}
+  .share-box p{font-size:15px;color:var(--text-sub);line-height:1.8;}
+
+  .comments-section{margin:0 16px 24px;background:var(--surface);border:1px solid var(--purple-pale);border-radius:var(--radius);padding:22px 20px;}
+  .comments-title{font-size:16px;font-weight:700;color:var(--purple-main);margin-bottom:14px;}
+  .comment-input{width:100%;padding:12px 15px;border-radius:var(--radius-sm);border:1.5px solid var(--purple-pale);background:var(--surface-2);font-family:'Tajawal',sans-serif;font-size:14px;color:var(--text-main);resize:vertical;min-height:80px;outline:none;transition:border-color 0.2s;display:block;margin-bottom:10px;}
+  .comment-input:focus{border-color:var(--purple-soft);}
+  .comment-submit{padding:10px 26px;border-radius:var(--radius-sm);border:none;background:var(--purple-main);color:#fff;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background 0.18s;}
+  .comment-submit:hover{background:var(--purple-deep);}
+  .comments-list{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
+  .comment-item{background:var(--purple-bg);border:1px solid var(--purple-pale);border-radius:var(--radius-sm);padding:12px 14px;font-size:14px;line-height:1.6;}
+  .comment-time{font-size:11px;color:var(--text-muted);margin-top:4px;}
+
+  .footer{border-top:1px solid var(--purple-pale);margin-top:8px;padding:28px 16px 40px;text-align:center;}
+  .footer-inner{display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .footer-credit{font-size:14px;font-weight:600;color:var(--text-sub);}
+  .footer-credit a{color:var(--purple-main);text-decoration:none;font-weight:700;}
+  .footer-credit a:hover{text-decoration:underline;}
+  .footer-meta{font-size:12px;color:var(--text-muted);}
+  .footer-copy{font-size:12px;color:var(--text-muted);}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">فيزياء — الصف الثالث ثانوي المسارات</div>
+  <h1>مراجعة تفاعلية للاختبار النهائي<br>لمادة الفيزياء</h1>
+  <p>اجب على الأسئلة واحصل على التصحيح والشرح فوراً</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-n" id="total-count">0</div><div class="hero-stat-l">إجمالي الأسئلة</div></div>
+    <div class="hero-stat"><div class="hero-stat-n" id="mc-count">0</div><div class="hero-stat-l">اختيار من متعدد</div></div>
+    <div class="hero-stat"><div class="hero-stat-n" id="tf-count">0</div><div class="hero-stat-l">صح / خطأ</div></div>
+  </div>
+</div>
+
+<div class="score-panel">
+  <div class="sc-item"><div class="sc-num" id="sc-ans">0</div><div class="sc-label">أجبت</div></div>
+  <div class="sc-item"><div class="sc-num ok" id="sc-cor">0</div><div class="sc-label">صحيح</div></div>
+  <div class="sc-item"><div class="sc-num bad" id="sc-wrg">0</div><div class="sc-label">خطأ</div></div>
+  <div class="sc-item"><div class="sc-num" id="sc-pct" style="color:var(--purple-main)">—</div><div class="sc-label">نسبة النجاح</div></div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+  <div class="progress-txt" id="prog-txt">0 من 0 سؤال</div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="setFilter('all',this)">الكل</button>
+  <button class="filter-btn" onclick="setFilter('em',this)">الكهرومغناطيسية</button>
+  <button class="filter-btn" onclick="setFilter('cur',this)">الدوائر الكهربائية</button>
+  <button class="filter-btn" onclick="setFilter('mag',this)">المجال المغناطيسي</button>
+  <button class="filter-btn" onclick="setFilter('wave',this)">الموجات</button>
+  <button class="filter-btn" onclick="setFilter('atom',this)">الذرة والكم</button>
+  <button class="filter-btn" onclick="setFilter('semi',this)">أشباه الموصلات</button>
+  <button class="filter-btn" onclick="setFilter('nuc',this)">الفيزياء النووية</button>
+</div>
+
+<div class="page-info" id="page-info"></div>
+<div id="quiz"></div>
+<div class="pagination" id="pag-bottom"></div>
+
+<div class="results-panel" id="results-panel">
+  <div class="results-score-big" id="res-pct">—</div>
+  <div class="results-label">نتيجتك النهائية 🎉</div>
+  <div class="results-grid">
+    <div class="results-item"><div class="results-item-n" id="res-total">0</div><div class="results-item-l">إجمالي الأسئلة</div></div>
+    <div class="results-item ok"><div class="results-item-n" id="res-cor">0</div><div class="results-item-l">صحيحة</div></div>
+    <div class="results-item bad"><div class="results-item-n" id="res-wrg">0</div><div class="results-item-l">خاطئة</div></div>
+  </div>
+  <button class="btn-reset" onclick="resetAll()">↺ إعادة الاختبار من البداية</button>
+</div>
+
+<div class="share-box">
+  <span class="sh-title">الدالّ على الخير كفاعله 🤍</span>
+  <p>إذا شفت إنها مفيدة شاركها مع أصحابك، يمكن تكون سبب في نجاحك بإذن الله ✨</p>
+</div>
+
+<div class="comments-section">
+  <div class="comments-title">💬 شاركنا رأيك في الاختبار</div>
+  <textarea class="comment-input" id="comment-text" placeholder="اكتب لي رايك في الاختبار..."></textarea>
+  <button class="comment-submit" onclick="submitComment()">إرسال التعليق</button>
+  <div class="comments-list" id="comments-list"></div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-credit">إعداد وتصميم: <a href="https://www.instagram.com/sw7dx" target="_blank" rel="noopener">@sw7dx</a></div>
+    <div class="footer-meta">فيزياء ثالث ثانوي المسارات — الفصل الدراسي الثاني 1446/1447هـ</div>
+    <div class="footer-copy">© 2026 جميع الحقوق محفوظة</div>
+  </div>
+</footer>
+
+<script>
+const PAGE_SIZE = 40;
+const Q = [
+  // ══ اختيار من متعدد ══
+  {id:1,cat:'em',type:'mc',text:'العالم الذي اكتشف أن المجال المغناطيسي المتغير يولد تياراً كهربائياً هو:',opts:['أورستد','مايكل فاراداي','كولوم','نيوتن'],ans:1,exp:'مايكل فاراداي اكتشف ظاهرة الحث الكهرومغناطيسي عام 1831م وصاغ قانونها.'},
+  {id:2,cat:'em',type:'mc',text:'تتولد أكبر قيمة للقوة الدافعة الكهربائية الحثية FME عندما يتحرك السلك في المجال المغناطيسي بزاوية مقدارها:',opts:['صفر','45°','90°','180°'],ans:2,exp:'أكبر قيمة للقوة الدافعة الحثية تكون عندما يكون السلك عمودياً على المجال (90°).'},
+  {id:3,cat:'em',type:'mc',text:'يتحرك سلك مستقيم طوله 2.0m بسرعة 3.0 m/s عمودياً على مجال مغناطيسي شدته 0.5T، فإن مقدار القوة الدافعة الكهربائية الحثية المتولدة يساوي:',opts:['V 1.5','V 3.0','V 0.33','V 6.0'],ans:0,exp:'FME = BLv = 0.5 × 2.0 × 3.0 = 3.0V، الإجابة الصحيحة V 3.0.'},
+  {id:4,cat:'em',type:'mc',text:'جهاز يعمل على تحويل الطاقة الميكانيكية إلى طاقة كهربائية:',opts:['المحرك الكهربائي','المولد الكهربائي','الجلفانومتر','المكثف'],ans:1,exp:'المولد الكهربائي يحول الطاقة الميكانيكية إلى كهربائية — عكس المحرك.'},
+  {id:5,cat:'em',type:'mc',text:'ما الكمية التي تمكن تومسون من حسابها باستخدام أنبوب الأشعة المهبطية؟',opts:['شحنة الإلكترون فقط','كتلة الإلكترون فقط','نسبة شحنة الإلكترون إلى كتلته q/m','سرعة الإلكترون في الفراغ'],ans:2,exp:'تومسون حدّد نسبة q/m للإلكترون — وهذا كان اكتشافاً ثورياً.'},
+  {id:6,cat:'em',type:'mc',text:'في تجربة تومسون، عندما تتحرك الإلكترونات في مسار مستقيم دون انحراف، فإن العلاقة بين سرعة الإلكترون v والمجالين E و B هي:',opts:['B/E = v','E/B = v','B×E = v','B×E² = v'],ans:1,exp:'عند التوازن: qE = qvB، إذاً v = E/B.'},
+  {id:7,cat:'em',type:'mc',text:'تسمى الأشكال المختلفة للذرة التي لها الخصائص الكيميائية نفسها ولكنها مختلفة في الكتل:',opts:['الأيونات','النظائر','الإلكترونات','الفوتونات'],ans:1,exp:'النظائر هي ذرات لنفس العنصر تتفق في عدد البروتونات وتختلف في عدد النيوترونات.'},
+  {id:8,cat:'em',type:'mc',text:'أي جهاز يُستخدم لقياس النسبة بين شحنة الأيون الموجب وكتلته وفصل الأيونات وفق كتلها؟',opts:['مولد فانديجراف','مطياف الكتلة','المحول الكهربائي','الكشاف الكهربائي'],ans:1,exp:'مطياف الكتلة يفصل الأيونات بحسب نسبة q/m ويستخدم لتحليل النظائر.'},
+  {id:9,cat:'em',type:'mc',text:'في مطياف الكتلة، يتناسب نصف قطر المسار الدائري للأيون r تناسباً طردياً مع:',opts:['شحنة الأيون q','المجال المغناطيسي B','كتلة الأيون m','مربع المجال المغناطيسي B²'],ans:2,exp:'r = mv/(qB)، إذاً r يتناسب طردياً مع الكتلة m.'},
+  {id:10,cat:'wave',type:'mc',text:'ما العلاقة الصحيحة التي تربط بين الطول الموجي λ والتردد f وسرعة الموجة v؟',opts:['fv = λ','L/v = λ','v/f = λ','vλ = f'],ans:2,exp:'v = fλ، إذاً λ = v/f — المعادلة الأساسية للموجات.'},
+  {id:11,cat:'wave',type:'mc',text:'أي من العوامل التالية يُعد شرطاً أساسياً لتوليد الموجات الكهرومغناطيسية؟',opts:['شحنات كهربائية ساكنة','تيار كهربائي مستمر وثابت','مجال مغناطيسي ثابت الشدة','شحنات كهربائية متسارعة'],ans:3,exp:'الشحنات المتسارعة تولد مجالاً كهربائياً وآخر مغناطيسياً متغيرَين → موجات كهرومغناطيسية.'},
+  {id:12,cat:'wave',type:'mc',text:'سرعة الموجة الكهرومغناطيسية في مادة عازلة ثابت عزلها K:',opts:['K√c = v','c×K = v','c/√K = v','K²c = v'],ans:2,exp:'سرعة الضوء في وسط عازل: v = c/√K حيث K ثابت العزل الكهربائي.'},
+  {id:13,cat:'wave',type:'mc',text:'ليكون الهوائي فعالاً في التقاط الموجات الكهرومغناطيسية، يُفضل أن يكون طوله مساوياً لـ:',opts:['ضعف الطول الموجي','نصف الطول الموجي λ/2','ربع الطول الموجي','الطول الموجي كاملاً'],ans:1,exp:'الهوائي الأكثر كفاءة طوله نصف الطول الموجي (λ/2).'},
+  {id:14,cat:'wave',type:'mc',text:'تسمى الخاصية التي تنتج فيها بلورات الكوارتز قوة دافعة كهربائية عند تشوهها بـ:',opts:['الكهرباء الساكنة','الكهرباء المتحركة','الكهرباء الإجهادية','الحث الكهرومغناطيسي'],ans:2,exp:'الكهرباء الإجهادية (Piezoelectricity) خاصية بلورات الكوارتز.'},
+  {id:15,cat:'wave',type:'mc',text:'وفقاً لقانون ستيفان-بولزمان، تتناسب القدرة الكلية المنبعثة من جسم تناسباً طردياً مع:',opts:['درجة الحرارة (T)','مربع درجة الحرارة (T²)','مكعب درجة الحرارة (T³)','الأس الرابع لدرجة الحرارة (T⁴)'],ans:3,exp:'قانون ستيفان-بولزمان: P = σAT⁴.'},
+  {id:16,cat:'atom',type:'mc',text:'في معادلة أينشتاين للتأثير الكهروضوئي، ماذا يمثل الرمز ϕ؟',opts:['الطاقة الحركية العظمى للإلكترون','طاقة الفوتون الساقط','دالة الشغل للفلز','جهد الإيقاف'],ans:2,exp:'دالة الشغل ϕ هي الحد الأدنى من الطاقة اللازمة لتحرير إلكترون من الفلز.'},
+  {id:17,cat:'atom',type:'mc',text:'ما مقدار الطاقة التي يعادلها إلكترون فولت واحد (1 eV) بوحدة الجول؟',opts:['J ¹⁹⁻10 × 1.6','J ³²⁻10 × 6.63','J ⁸¹10 × 3.00','J ³¹⁻10 × 9.11'],ans:0,exp:'1 eV = 1.6 × 10⁻¹⁹ J.'},
+  {id:18,cat:'atom',type:'mc',text:'أي الظواهر التالية أثبتت أن للفوتون زخماً رغم أنه ليس له كتلة؟',opts:['الحيود','التداخل','تأثير كومبتون','الاستقطاب'],ans:2,exp:'أثبت كومبتون أن الفوتون يتصادم مع الإلكترون ويمنحه زخماً.'},
+  {id:19,cat:'atom',type:'mc',text:'يمثل ميل الخط المستقيم في الرسم البياني للعلاقة بين الطاقة الحركية العظمى والتردد:',opts:['سرعة الضوء (c)','ثابت بلانك (h)','شحنة الإلكترون (q)','تردد العتبة (f)'],ans:1,exp:'ميل الخط في هذا الرسم يساوي ثابت بلانك h.'},
+  {id:20,cat:'atom',type:'mc',text:'ما المعادلة الصحيحة التي تمثل طول موجة دي برولي لجسيم متحرك؟',opts:['λ = h/(mv)','λ = mv/h','λ = v·m·h','λ = m/(vh)'],ans:0,exp:'معادلة دي برولي: λ = h/p = h/(mv).'},
+  {id:21,cat:'atom',type:'mc',text:'أي العبارات التالية تصف مبدأ عدم التحديد لهيزنبرغ بشكل صحيح؟',opts:['يمكن تحديد موقع وزخم الجسيم بدقة متناهية','من غير الممكن قياس زخم جسيم وموقعه بدقة في الوقت نفسه','الطاقة والزمن لا يخضعان لمبدأ عدم التحديد','ينطبق فقط على الأجسام الكبيرة'],ans:1,exp:'مبدأ هيزنبرغ: Δx·Δp ≥ h/4π.'},
+  {id:22,cat:'atom',type:'mc',text:'لماذا لا يمكن ملاحظة الطبيعة الموجية للأجسام الكبيرة؟',opts:['لأن سرعتها عالية جداً','لأن كتلتها صغيرة جداً','لأن طول موجة دي برولي لها أصغر جداً من أي جهاز قياس','لأنها لا تحمل شحنة'],ans:2,exp:'الكتلة الكبيرة تجعل λ = h/mv صغيرة جداً لا تُقاس.'},
+  {id:23,cat:'atom',type:'mc',text:'ما التجربة التي أثبتت الطبيعة الموجية للإلكترونات من خلال ملاحظة أنماط الحيود؟',opts:['تجربة قطرة الزيت لمليكان','تأثير كومبتون','تجربة دافيسون وجيرمر','تجربة رذرفورد'],ans:2,exp:'دافيسون وجيرمر أثبتا حيود الإلكترونات عند مرورها عبر البلورات.'},
+  {id:24,cat:'atom',type:'mc',text:'إذا زاد زخم جسيم (p)، فماذا يحدث لطول موجة دي برولي (λ)؟',opts:['تزداد','تقل','تبقى ثابتة','تتذبذب'],ans:1,exp:'λ = h/p — علاقة عكسية.'},
+  {id:25,cat:'atom',type:'mc',text:'أي السلاسل في طيف الهيدروجين تقع في منطقة الضوء المرئي؟',opts:['سلسلة ليمان','سلسلة بالمر','سلسلة باشن','سلسلة براكيت'],ans:1,exp:'سلسلة بالمر تقع في الضوء المرئي، تنتج عن انتقالات إلى المستوى n=2.'},
+  {id:26,cat:'atom',type:'mc',text:'وفقاً لنموذج بور، يتناسب نصف قطر مدار الإلكترون rn في ذرة الهيدروجين مع:',opts:['العدد الرئيسي n','مربع العدد الرئيسي n²','مكعب العدد الرئيسي n³','مقلوب العدد الرئيسي 1/n'],ans:1,exp:'rn = n² × r₁ — يتناسب مع n².'},
+  {id:27,cat:'atom',type:'mc',text:'ما السبب الرئيسي لفشل نموذج رذرفورد النووي؟',opts:['لأن معظم حجم الذرة فراغ','لأنه لم يفسر النيوترونات','لأن الإلكترون المتسارع يجب أن يشع طاقة ويسقط في النواة','لأنه افترض تركز الكتلة في النواة'],ans:2,exp:'الإلكترون في مدار دائري متسارع يجب أن يشع طاقة → يسقط في النواة.'},
+  {id:28,cat:'atom',type:'mc',text:'إذا كانت طاقة مستوى الاستقرار E₁ = −13.6 eV، فما طاقة المستوى الثاني E₂؟',opts:['eV 3.40−','eV 6.80−','eV 1.51−','eV 27.2−'],ans:0,exp:'E₂ = E₁/n² = -13.6/4 = -3.40 eV.'},
+  {id:29,cat:'atom',type:'mc',text:'ماذا تمثل الخطوط المعتمة في الطيف الضوئي للشمس (خطوط فرنهوفر)؟',opts:['طيف انبعاث مستمر','طيف انبعاث خطي','طيف امتصاص','أشعة جاما'],ans:2,exp:'خطوط فرنهوفر هي خطوط امتصاص — غازات الغلاف الشمسي تمتص ترددات معينة.'},
+  {id:30,cat:'atom',type:'mc',text:'يكون مدار الإلكترون مستقراً فقط إذا كان محيطه (2πr) يساوي:',opts:['نصف طول موجة دي برولي','ضعف طول موجة دي برولي','أعداداً صحيحة من طول موجة دي برولي (nλ)','مربع طول موجة دي برولي'],ans:2,exp:'2πr = nλ — شرط الاستقرار.'},
+  {id:31,cat:'atom',type:'mc',text:'العملية التي يصطدم فيها فوتون بذرة مثارة فيُنبعث فوتون جديد مطابق تسمى:',opts:['الانبعاث التلقائي','الانبعاث المحفز','التأثير الكهروضوئي','الامتصاص الذري'],ans:1,exp:'الانبعاث المحفز (Stimulated Emission) هو مبدأ الليزر.'},
+  {id:32,cat:'semi',type:'mc',text:'المادة شبه الموصلة التي تُصنع منها أجهزة الليزر في مشغلات CD:',opts:['الهيليوم-نيون','الياقوت','زرنيخات الجاليوم','ثاني أكسيد الكربون'],ans:2,exp:'زرنيخات الجاليوم (GaAs) تولد ضوء ليزر عند مرور التيار.'},
+  {id:33,cat:'semi',type:'mc',text:'أي الخصائص تميز ضوء الليزر عن ضوء المصباح المتوهج؟',opts:['غير مترابط ومتعدد الأطوال الموجية','مترابط وأحادي اللون','ينتشر في جميع الاتجاهات','تختلف موجاته في الطور'],ans:1,exp:'الليزر أحادي الطول الموجي، مترابط الطور، في اتجاه واحد.'},
+  {id:34,cat:'semi',type:'mc',text:'المسافة الأكثر احتمالية لوجود الإلكترون في ذرة الهيدروجين وفق الكم الميكانيكا:',opts:['نفس نصف قطر بور','ضعف نصف قطر بور','أقل بكثير من نصف قطر بور','غير محددة'],ans:0,exp:'الكم الميكانيكا تتوافق مع بور: أكثر المواقع احتمالاً هو نصف قطر بور.'},
+  {id:35,cat:'semi',type:'mc',text:'ما مقدار فجوة الطاقة للجرمانيوم Ge عند درجة حرارة الغرفة؟',opts:['eV 1.1','eV 0.7','eV 0.5','eV 10'],ans:1,exp:'فجوة طاقة الجرمانيوم ≈ 0.7 eV، السيليكون ≈ 1.1 eV.'},
+  {id:36,cat:'semi',type:'mc',text:'أي المواد تُستخدم كشوائب للحصول على النوع السالب (n-type) في السيليكون؟',opts:['الجاليوم','الزرنيخ','الألومنيوم','البورون'],ans:1,exp:'الزرنيخ (As) له 5 إلكترونات خارجية، يمنح إلكترون حر → n-type.'},
+  {id:37,cat:'semi',type:'mc',text:'ماذا يحدث لموصلية الفلزات عند ارتفاع درجة حرارتها؟',opts:['تزداد الموصلية','تقل الموصلية','تظل ثابتة','تصبح صفراً'],ans:1,exp:'في الموصلات: الحرارة تزيد اهتزاز الشبكة → تقل الموصلية.'},
+  {id:38,cat:'semi',type:'mc',text:'سرعة الحركة الكلية الانتظامية للإلكترونات تحت المجال الكهربائي تُعرف بـ:',opts:['السرعة الحرارية','السرعة العشوائية','السرعة الانسياقية','سرعة الضوء'],ans:2,exp:'السرعة الانسياقية (Drift Velocity).'},
+  {id:39,cat:'semi',type:'mc',text:'في أشباه الموصلات من النوع الموجب (p-type)، حاملات الشحنة الرئيسية هي:',opts:['الإلكترونات الحرة','الفجوات','النيوترونات','البروتونات'],ans:1,exp:'p-type مطعّم بذرات ثلاثية التكافؤ → الفجوات هي الحاملات الرئيسية.'},
+  {id:40,cat:'semi',type:'mc',text:'المنطقة في الدايود الخالية من الفجوات والإلكترونات الحرة تسمى:',opts:['طبقة التوصيل','طبقة النضوب','منطقة التكافؤ','الفجوة الموجية'],ans:1,exp:'طبقة النضوب (Depletion Layer).'},
+  {id:41,cat:'semi',type:'mc',text:'مقدار الهبوط في الجهد عبر دايود السيليكون عند الانحياز الأمامي:',opts:['V 0.3','V 0.4','V 0.7','V 1.5'],ans:2,exp:'دايود السيليكون عند الانحياز الأمامي ≈ 0.7V.'},
+  {id:42,cat:'semi',type:'mc',text:'في ترانزستور npn، الطبقة المركزية الرقيقة من النوع p تسمى:',opts:['الباعث (Emitter)','الجامع (Collector)','القاعدة (Base)','المصعد (Anode)'],ans:2,exp:'القاعدة (Base) تتحكم في التيار.'},
+  {id:43,cat:'semi',type:'mc',text:'أي الأدوات تستخدم لتحويل الجهد المتناوب AC إلى جهد مستمر DC؟',opts:['المكثف','الدايود (المقوّم)','المقاومة','الترانزستور'],ans:1,exp:'الدايود يسمح بمرور التيار في اتجاه واحد → يحول AC إلى DC.'},
+  {id:44,cat:'semi',type:'mc',text:'ما العلاقة التي تربط بين تيار الباعث IE وتيار القاعدة IB وتيار الجامع IC؟',opts:['IB + IE = IC','IC + IB = IE','IC + IE = IB','IB - IC = IE'],ans:1,exp:'IE = IB + IC — قانون الانعقاد.'},
+  {id:45,cat:'nuc',type:'mc',text:'العالم الذي اكتشف النيوترون عام 1932م:',opts:['إرنست رذرفورد','جيمس شادويك','هنري موسلي','ألبرت أينشتاين'],ans:1,exp:'جيمس شادويك اكتشف النيوترون عام 1932م.'},
+  {id:46,cat:'nuc',type:'mc',text:'وحدة الكتل الذرية (u) تساوي 1/12 من كتلة نظير ذرة:',opts:['الهيدروجين-1','الهيليوم-4','الكربون-12','الأكسجين-16'],ans:2,exp:'وحدة الكتل الذرية = 1/12 كتلة ذرة الكربون-12.'},
+  {id:47,cat:'nuc',type:'mc',text:'القوة التي تؤثر بين النيوكليونات في النواة وتتغلب على التنافر الكهروستاتيكي:',opts:['قوة التجاذب الكتلي','القوة الكهرومغناطيسية','القوة النووية الضعيفة','القوة النووية القوية'],ans:3,exp:'القوة النووية القوية، قصيرة المدى لكنها أقوى من الكهرومغناطيسية.'},
+  {id:48,cat:'nuc',type:'mc',text:'أي الأنوية الأكثر استقراراً بناءً على منحنى طاقة الربط النووية؟',opts:['الهيليوم He⁴','الكربون C¹²','الحديد Fe⁵⁶','اليورانيوم U²³⁸'],ans:2,exp:'الحديد-56 هو قمة منحنى طاقة الربط.'},
+  {id:49,cat:'nuc',type:'mc',text:'وحدة كتل ذرية واحدة (1u) تكافئ بوحدة الإلكترون فولت:',opts:['MeV 931.49','MeV 1.66','MeV 4.03','MeV 240.3'],ans:0,exp:'1u = 931.49 MeV.'},
+  {id:50,cat:'nuc',type:'mc',text:'ما الجسيم الذي ينبعث من النواة عندما يقل العدد الكتلي A بمقدار 4 ويقل العدد الذري Z بمقدار 2؟',opts:['جسيم بيتا β','جسيم ألفا α','أشعة جاما γ','نيوترون'],ans:1,exp:'جسيم ألفا = نواة هيليوم (2 بروتون + 2 نيوترون).'},
+  {id:51,cat:'nuc',type:'mc',text:'في اضمحلال بيتا السالب، يتحول النيوترون إلى بروتون وينبعث معه:',opts:['الإلكترون وضديد النيوترينو','جسيم ألفا وفوتون','بوزيترون ونيوترينو','فوتون عالي الطاقة'],ans:0,exp:'β⁻: n → p + e⁻ + ν̄ₑ'},
+  {id:52,cat:'nuc',type:'mc',text:'فترة نصف العمر لليود-131 هي 8 أيام، كم يتبقى من 20g بعد 16 يوماً؟',opts:['g 10','g 5','g 2.5','g 1'],ans:1,exp:'16÷8 = 2 نصف عمر → 20÷4 = 5g.'},
+  {id:53,cat:'nuc',type:'mc',text:'المادة المستخدمة في المفاعلات النووية لامتصاص النيوترونات والتحكم في التفاعل المتسلسل:',opts:['اليورانيوم المخصب','قضبان الكادميوم','الماء الثقيل','الجرافيت'],ans:1,exp:'قضبان الكادميوم تمتص النيوترونات بكفاءة عالية.'},
+  {id:54,cat:'nuc',type:'mc',text:'اندماج أنوية صغيرة لتكوين نواة أكبر يسمى:',opts:['الانشطار النووي','الاضمحلال الإشعاعي','الاندماج النووي','التفاعل المتسلسل'],ans:2,exp:'الاندماج النووي — ما يحدث في الشمس.'},
+  {id:55,cat:'nuc',type:'mc',text:'جهاز يسرّع البروتونات أو الإلكترونات في خط مستقيم باستخدام أنابيب مجوفة:',opts:['المسارع الخطي','السنكروترون','عداد جايجر','حجرة الفقاعة'],ans:0,exp:'المسارع الخطي (Linear Accelerator).'},
+  {id:56,cat:'nuc',type:'mc',text:'الكاشف الذي يعتمد على تكوين فقاعات بخار في سائل ساخن لتتبع مسارات الجسيمات:',opts:['الصفائح الفوتوغرافية','حجرة الفقاعة','حجرة الضباب','عداد جايجر'],ans:1,exp:'حجرة الفقاعة تتتبع مسارات الجسيمات المشحونة.'},
+  {id:57,cat:'nuc',type:'mc',text:'وفقاً للنموذج المعياري، مكونات البروتون هي:',opts:['كوارك علوي وكواركان سفليان','كواركان علويان وكوارك سفلي (uud)','ثلاثة كواركات علوية','ثلاثة كواركات سفلية'],ans:1,exp:'البروتون = uud، الشحنة: ⅔+⅔-⅓ = +1.'},
+  {id:58,cat:'nuc',type:'mc',text:'الجسيم الوسيط الحامل للقوة الكهرومغناطيسية:',opts:['الجلون','البوزون الضعيف','الجرافيتون','الفوتون'],ans:3,exp:'الفوتون هو حامل القوة الكهرومغناطيسية.'},
+  {id:59,cat:'cur',type:'mc',text:'أي المعادلات تمثل قانون أوم؟',opts:['I/V = R','R/I = V','V/I = R','RV = I'],ans:2,exp:'قانون أوم: R = V/I أو V = IR.'},
+  {id:60,cat:'cur',type:'mc',text:'تُقاس القدرة الكهربائية في النظام الدولي بوحدة:',opts:['جول (J)','فولت (V)','واط (W)','كولوم (C)'],ans:2,exp:'الواط (W) = جول/ثانية.'},
+  {id:61,cat:'cur',type:'mc',text:'ماذا يحدث للمقاومة الكهربائية لسلك فلزي عند زيادة درجة حرارته؟',opts:['تزداد','تقل','تبقى ثابتة','تصبح صفراً'],ans:0,exp:'الحرارة تزيد اهتزاز الشبكة → تزداد المقاومة.'},
+  {id:62,cat:'cur',type:'mc',text:'لقياس شدة التيار في عنصر معين، يجب توصيل الأميتر:',opts:['على التوازي مع العنصر','على التوالي مع العنصر','بين طرفي البطارية مباشرة','خارج الدائرة'],ans:1,exp:'الأميتر يوصل على التوالي.'},
+  {id:63,cat:'cur',type:'mc',text:'معادلة الطاقة الحرارية E في مقاومة R بتيار I خلال زمن t:',opts:['E = I²Rt','E = IRt','E = Vt/R','E = t(V/R)'],ans:0,exp:'E = I²Rt (قانون جول للتسخين الكهربائي).'},
+  {id:64,cat:'cur',type:'mc',text:'أي المواد التالية مقاومتها صفر ولا تسبب ضياعاً في الطاقة؟',opts:['الموصلات فائقة التوصيل','المقاومات الحرارية','العوازل','أشباه الموصلات'],ans:0,exp:'الموصلات فائقة التوصيل (Superconductors) مقاومتها صفر.'},
+  {id:65,cat:'cur',type:'mc',text:'لتقليل القدرة الضائعة في أسلاك النقل، تقوم شركات الكهرباء بـ:',opts:['رفع الجهد لتقليل التيار','خفض الجهد لزيادة التيار','زيادة مقاومة الأسلاك','استخدام تيار مستمر فقط'],ans:0,exp:'P_loss = I²R، لتقليل الخسائر نرفع الجهد ونقلل التيار.'},
+  {id:66,cat:'cur',type:'mc',text:'وحدة الكيلوواط.ساعة (kWh) تُستخدم لقياس:',opts:['الطاقة الكهربائية المستهلكة','القدرة الكهربائية','فرق الجهد','شدة التيار'],ans:0,exp:'kWh وحدة الطاقة المستهلكة في فواتير الكهرباء.'},
+  {id:67,cat:'cur',type:'mc',text:'في دائرة التوالي، إذا كان التيار في المقاومة الأولى 0.2A، فما التيار في المقاومة الثانية؟',opts:['أقل من 0.2','أكبر من 0.2','يساوي 0.2A','يعتمد على قيمة المقاومة'],ans:2,exp:'في التوالي التيار واحد في جميع العناصر.'},
+  {id:68,cat:'cur',type:'mc',text:'معادلة المقاومة المكافئة لمقاومات على التوازي:',opts:['R = R₁ + R₂','R = R₁ × R₂','1/R = 1/R₁ + 1/R₂','R = R₁ - R₂'],ans:2,exp:'للتوازي: 1/R = 1/R₁ + 1/R₂ + ...'},
+  {id:69,cat:'cur',type:'mc',text:'ماذا يحدث للمقاومة المكافئة في دائرة التوازي عند إضافة مقاومة جديدة؟',opts:['تزداد','تقل','تبقى ثابتة','تصبح صفراً'],ans:1,exp:'إضافة مقاومة للتوازي تزيد المسارات → تقل المقاومة الكلية.'},
+  {id:70,cat:'cur',type:'mc',text:'الدائرة التي يمر فيها التيار نفسه في كل جزء من أجزائها:',opts:['دائرة التوازي','دائرة التوالي','دائرة القصر','الدائرة المركبة'],ans:1,exp:'في دائرة التوالي التيار ثابت في جميع العناصر.'},
+  {id:71,cat:'cur',type:'mc',text:'مجزئ الجهد يُستخدم للحصول على جهد:',opts:['أقل من جهد المصدر','أكبر من جهد المصدر','متردد','منعدم'],ans:0,exp:'مجزئ الجهد يُنتج جهداً أصغر من المصدر.'},
+  {id:72,cat:'mag',type:'mc',text:'ما الاسم الذي يطلق على عدد خطوط المجال المغناطيسي التي تخترق السطح؟',opts:['المنطقة المغناطيسية','التدفق المغناطيسي','الحث المغناطيسي','الملف اللولبي'],ans:1,exp:'التدفق المغناطيسي Φ = BA cosθ.'},
+  {id:73,cat:'mag',type:'mc',text:'عند تطبيق القاعدة الثانية لليد اليمنى على ملف لولبي، إلى ماذا يشير الإبهام؟',opts:['اتجاه التيار الكهربائي','القطب الجنوبي','القطب الشمالي للمغناطيس الكهربائي','اتجاه القوة الكهربائية'],ans:2,exp:'القاعدة الثانية: الإبهام يشير للقطب الشمالي.'},
+  {id:74,cat:'mag',type:'mc',text:'القوة المغناطيسية المؤثرة في سلك يحمل تياراً I في مجال B:',opts:['F = BLI','F = LI/B','F = B/LI','F = BL²I'],ans:0,exp:'F = BIL sinθ، وعند θ=90° → F = BIL.'},
+  {id:75,cat:'mag',type:'mc',text:'عندما يسري تياران في سلكين متوازيين في نفس الاتجاه، فإن القوة بينهما:',opts:['قوة تنافر','قوة تجاذب','قوة دافعة كهربائية','صفر'],ans:1,exp:'تياران في نفس الاتجاه → تجاذب.'},
+  {id:76,cat:'mag',type:'mc',text:'الجزء المسؤول عن عكس اتجاه التيار في ملف المحرك الكهربائي:',opts:['المغناطيس الدائم','الفرشاة','قلب الحديد','الحلقة المشقوقة (عاكس التيار)'],ans:3,exp:'الحلقة المشقوقة (Commutator) تعكس اتجاه التيار كل نصف دورة.'},
+  {id:77,cat:'mag',type:'mc',text:'إذا تحرك إلكترون في مجال مغناطيسي عمودياً، اتجاه القوة المؤثرة عليه:',opts:['نفس اتجاه قاعدة اليد اليمنى','معاكس لاتجاه قاعدة اليد اليمنى','موازٍ لاتجاه حركته','موازٍ للمجال'],ans:1,exp:'الإلكترون شحنة سالبة → القوة معاكسة لقاعدة اليد اليمنى.'},
+
+  // ══ صح وخطأ — من الورقة بدون علامة ! ══
+  {id:100,cat:'em',type:'tf',text:'القوة الدافعة الكهربائية الحثية (FME) هي في الواقع قوة تُقاس بوحدة النيوتن.',ans:false,exp:'خطأ — FME قوة دافعة كهربائية تُقاس بالفولت (V) وليس النيوتن.'},
+  {id:101,cat:'em',type:'tf',text:'يتولد تيار كهربائي حثي في سلك عندما يتحرك موازياً لخطوط المجال المغناطيسي.',ans:false,exp:'خطأ — التيار الحثي يتولد فقط عند الحركة العمودية أو بزاوية على المجال، لا الموازية.'},
+  {id:102,cat:'em',type:'tf',text:'يعمل الميكروفون على تحويل الموجات الصوتية إلى نبضات كهربائية باستخدام مبدأ الحث الكهرومغناطيسي.',ans:true,exp:'صح — الميكروفون الديناميكي يعمل بمبدأ الحث الكهرومغناطيسي.'},
+  {id:103,cat:'em',type:'tf',text:'متوسط القدرة ACp في مولد التيار المتناوب يساوي نصف القدرة العظمى AC,max P.',ans:true,exp:'صح — P_avg = P_max/2 للتيار المتناوب الجيبي.'},
+  {id:104,cat:'wave',type:'tf',text:'تنتج الموجات الكهرومغناطيسية عن تسارع الشحنات الكهربائية.',ans:true,exp:'صح — الشحنات المتسارعة مصدر الموجات الكهرومغناطيسية.'},
+  {id:105,cat:'em',type:'tf',text:'في أنبوب تومسون، القوة المغناطيسية المؤثرة في الإلكترون تكون موازية لاتجاه حركته.',ans:false,exp:'خطأ — القوة المغناطيسية دائماً عمودية على اتجاه الحركة.'},
+  {id:106,cat:'em',type:'tf',text:'يمكن استخدام مطياف الكتلة لفصل عينة من اليورانيوم إلى النظائر المكونة لها.',ans:true,exp:'صح — مطياف الكتلة يفصل النظائر بحسب نسبة الكتلة إلى الشحنة.'},
+  {id:107,cat:'wave',type:'tf',text:'في الموجة الكهرومغناطيسية، يكون المجالان الكهربائي والمغناطيسي متعامدين على بعضهما وعلى اتجاه انتشار الموجة.',ans:true,exp:'صح — هذه من أساسيات الموجات الكهرومغناطيسية.'},
+  {id:108,cat:'wave',type:'tf',text:'سرعة الموجات الكهرومغناطيسية في المواد العازلة أكبر دائماً من سرعتها في الفراغ.',ans:false,exp:'خطأ — سرعة الضوء في أي وسط مادي أقل من سرعته في الفراغ (v = c/√K، K>1).'},
+  {id:109,cat:'wave',type:'tf',text:'كلما زاد الطول الموجي للموجة الكهرومغناطيسية زاد ترددها في الفراغ.',ans:false,exp:'خطأ — علاقة عكسية: f = v/λ، كلما زاد λ قل f.'},
+  {id:110,cat:'wave',type:'tf',text:'فشلت النظرية الكهرومغناطيسية لماكسويل في تفسير الطيف المنبعث من الأجسام الساخنة.',ans:true,exp:'صح — فشل الفيزياء الكلاسيكية في تفسير طيف الجسم الأسود أدى لظهور نظرية الكم.'},
+  {id:111,cat:'atom',type:'tf',text:'في التأثير الكهروضوئي، تتحرر الإلكترونات من الفلز إذا كان تردد الضوء الساقط أقل من تردد العتبة بشرط زيادة شدة الضوء.',ans:false,exp:'خطأ — زيادة الشدة لا تساعد إذا كان التردد أقل من العتبة.'},
+  {id:112,cat:'atom',type:'tf',text:'طاقة اهتزاز الذرات في الأجسام الصلبة مكمّة، أي أنها تأخذ قيماً محددة فقط.',ans:true,exp:'صح — هذا ما افترضه بلانك لتفسير طيف الجسم الأسود.'},
+  {id:113,cat:'atom',type:'tf',text:'في تأثير كومبتون، يكون الطول الموجي للفوتون المشتّت أقصر من الطول الموجي للفوتون الساقط.',ans:false,exp:'خطأ — الفوتون المشتّت يفقد جزءاً من طاقته، فيكون طوله الموجي أطول (طاقة أقل).'},
+  {id:114,cat:'atom',type:'tf',text:'توقع العالم دي برولي أن للجسيمات المادية خصائص موجية.',ans:true,exp:'صح — فرضية دي برولي 1924: λ = h/mv.'},
+  {id:115,cat:'atom',type:'tf',text:'الأجسام الكبيرة التي نراها يومياً لها أطوال موجة دي برولي يمكن قياسها.',ans:false,exp:'خطأ — أطوال موجتها صغيرة جداً لا تُقاس بأي جهاز.'},
+  {id:116,cat:'atom',type:'tf',text:'ينص مبدأ عدم التحديد لهيزنبرغ على أنه من المستحيل معرفة موقع الإلكترون وزخمه بدقة في الوقت نفسه.',ans:true,exp:'صح — Δx·Δp ≥ h/4π.'},
+  {id:117,cat:'atom',type:'tf',text:'طاقة الذرة مكمّاة، أي أنها تأخذ قيماً محددة ومسموحاً بها فقط.',ans:true,exp:'صح — أساس نموذج بور وميكانيكا الكم.'},
+  {id:118,cat:'atom',type:'tf',text:'الضوء المنبعث من مصباح متوهج هو ضوء مترابط ومتعامد الأطوار الموجية.',ans:false,exp:'خطأ — ضوء المصباح غير مترابط ومتعدد الأطوال الموجية، عكس الليزر.'},
+  {id:119,cat:'atom',type:'tf',text:'في جهاز الليزر، تكون إحدى المرآتين عاكسة بنسبة تزيد على 99.9% والأخرى عاكسة جزئياً.',ans:true,exp:'صح — مرآة كاملة + مرآة شبه شفافة = تجويف الرنين في الليزر.'},
+  {id:120,cat:'atom',type:'tf',text:'المنطقة ذات الاحتمالية العالية لوجود الإلكترون فيها تسمى السحابة الإلكترونية.',ans:true,exp:'صح — النموذج الكمي يصف الإلكترون بسحابة احتمالية.'},
+  {id:121,cat:'atom',type:'tf',text:'طول موجة دي برولي للجسيم يتناسب طردياً مع كتلته.',ans:false,exp:'خطأ — λ = h/mv، علاقة عكسية: كلما زادت الكتلة قل طول الموجة.'},
+  {id:122,cat:'atom',type:'tf',text:'تكون الذرة في حالة إثارة عندما تكون طاقتها أقل من أقل مقدار مسموح به.',ans:false,exp:'خطأ — حالة الإثارة هي عندما تكتسب الذرة طاقة وينتقل الإلكترون لمستوى أعلى من مستوى الاستقرار.'},
+  {id:123,cat:'atom',type:'tf',text:'سلسلة ليمان في طيف الهيدروجين تنتج عن انتقال الإلكترون إلى المستوى الأول وتقع في منطقة الأشعة فوق البنفسجية.',ans:true,exp:'صح — سلسلة ليمان تقع في منطقة UV وتنتج عن انتقالات إلى n=1.'},
+  {id:124,cat:'semi',type:'tf',text:'عند توصيل الدايود بطريقة الانحياز العكسي، يقل عرض طبقة النضوب ويمر تيار كهربائي كبير.',ans:false,exp:'خطأ — الانحياز العكسي يزيد عرض طبقة النضوب ويمنع مرور التيار.'},
+  {id:125,cat:'semi',type:'tf',text:'الدايود المصنوع من السيليكون يحقق قانون أوم لأن مقاومته ثابتة.',ans:false,exp:'خطأ — الدايود غير أومي، مقاومته تتغير بحسب الجهد المطبق.'},
+  {id:126,cat:'semi',type:'tf',text:'النظائر هي ذرات للعنصر نفسه تتفق في عدد النيوترونات وتختلف في عدد البروتونات.',ans:false,exp:'خطأ — النظائر تتفق في عدد البروتونات وتختلف في عدد النيوترونات.'},
+  {id:127,cat:'semi',type:'tf',text:'القوة النووية القوية هي قوة قصيرة المدى لا يتجاوز مداها نصف قطر البروتون تقريباً.',ans:true,exp:'صح — القوة النووية القوية تعمل فقط على مستوى النواة.'},
+  {id:128,cat:'nuc',type:'tf',text:'يحدث الانشطار النووي عندما تنشطر النواة الثقيلة إلى نواتين أو أكثر عند قذفها بالنيوترونات.',ans:true,exp:'صح — الانشطار النووي يستخدم في المفاعلات وينتج طاقة هائلة.'},
+  {id:129,cat:'nuc',type:'tf',text:'وحدة قياس النشاط الإشعاعي في النظام الدولي هي البيكرل (Bq).',ans:true,exp:'صح — 1 Bq = تفكك نووي واحد في الثانية.'},
+  {id:130,cat:'nuc',type:'tf',text:'في جهاز السنكروترون، تُستخدم المجالات المغناطيسية لثني مسار الجسيمات وجعلها تتحرك في مسار دائري.',ans:true,exp:'صح — المجالات المغناطيسية توجه الجسيمات في المسار الدائري.'},
+  {id:131,cat:'nuc',type:'tf',text:'يتكون النيوترون من كوارك علوي واحد وكواركين سفليين (udd) وتكون شحنته الكلية صفراً.',ans:true,exp:'صح — النيوترون = udd، الشحنة: ⅔-⅓-⅓ = 0.'},
+  {id:132,cat:'nuc',type:'tf',text:'أشعة جاما (γ) عبارة عن فوتونات ذات طاقة عالية ولا تغير في العدد الكتلي أو الذري للنواة.',ans:true,exp:'صح — أشعة جاما فوتونات عالية الطاقة لا تغير عدد النيوكليونات.'},
+  {id:133,cat:'cur',type:'tf',text:'تنتج دائرة القصر (Short Circuit) عندما تكون المقاومة صغيرة جداً ويمر تيار كبير جداً.',ans:true,exp:'صح — القصر يحدث عند توصيل طرفي مصدر الجهد بمقاومة معدومة تقريباً.'},
+  {id:134,cat:'cur',type:'tf',text:'تزداد المقاومة الكهربائية لسلك ما بنقصان مساحة مقطعه العرضي.',ans:true,exp:'صح — R = ρL/A، المقاومة تتناسب عكسياً مع مساحة المقطع.'},
+  {id:135,cat:'cur',type:'tf',text:'تقوم شركات الكهرباء ببيع الطاقة الكهربائية للمستهلكين بوحدة الواط (W).',ans:false,exp:'خطأ — تُباع بوحدة كيلوواط.ساعة (kWh).'},
+  {id:136,cat:'cur',type:'tf',text:'مقدار 1 kWh يكافئ 3.6 × 10⁶ J.',ans:true,exp:'صح — 1 kWh = 1000W × 3600s = 3.6×10⁶ J.'},
+  {id:137,cat:'cur',type:'tf',text:'في دوائر التوازي الكهربائية، يكون فرق الجهد هو نفسه في كل مسار من مسارات الدائرة.',ans:true,exp:'صح — أهم خاصية التوازي: الجهد ثابت على جميع الفروع.'},
+  {id:138,cat:'cur',type:'tf',text:'المقاومة المكافئة لمجموعة مقاومات متصلة على التوالي تكون دائماً أصغر من أي مقاومة منفردة.',ans:false,exp:'خطأ — التوالي يزيد المقاومة. التوازي هو الذي يجعلها أصغر.'},
+  {id:139,cat:'cur',type:'tf',text:'التيار الكلي في دائرة التوازي يساوي مجموع التيارات المارة في المسارات المنفردة.',ans:true,exp:'صح — I_total = I₁ + I₂ + I₃ + ...'},
+  {id:140,cat:'cur',type:'tf',text:'يتم توصيل الفولتميتر في الدوائر الكهربائية على التوالي لقياس فرق الجهد.',ans:false,exp:'خطأ — الفولتميتر يوصل على التوازي.'},
+  {id:141,cat:'cur',type:'tf',text:'الدوائر الكهربائية المركبة هي التي تحتوي على نوعي التوصيل (التوالي والتوازي) معاً.',ans:true,exp:'صح — الدائرة المركبة تجمع التوالي والتوازي.'},
+  {id:142,cat:'mag',type:'tf',text:'تنتج دائرة القصر عندما تكون الطبقة العازلة للأسلاك تالفة وتتلامس الأسلاك مما يقلل المقاومة بشكل خطير.',ans:true,exp:'صح — تلامس الأسلاك العارية يسبب تياراً هائلاً قد يؤدي لحريق.'},
+  {id:143,cat:'mag',type:'tf',text:'يمكن لقاطع التفريغ الأرضي الخاطئ أن يحمي الشخص من الموت بالصعقة حتى عند مرور تيار 5 mA.',ans:true,exp:'صح — GFCI يكتشف أي فرق بسيط في التيار ويفتح الدائرة فوراً.'},
+  {id:144,cat:'mag',type:'tf',text:'تُستخدم القاعدة الأولى لليد اليمنى لتحديد اتجاه المجال المغناطيسي حول سلك مستقيم يحمل تياراً.',ans:true,exp:'صح — الإبهام يشير لاتجاه التيار والأصابع تشير لاتجاه المجال.'},
+  {id:145,cat:'mag',type:'tf',text:'تتناسب شدة المجال المغناطيسي المتولد حول سلك مستقيم تناسباً طردياً مع مقدار التيار المار فيه.',ans:true,exp:'صح — B ∝ I للسلك المستقيم.'},
+  {id:146,cat:'mag',type:'tf',text:'تكون القوة المغناطيسية المؤثرة في سلك في مجال مغناطيسي مساوية للصفر عندما يكون السلك موازياً لخطوط المجال.',ans:true,exp:'صح — F = BIL sinθ، عند θ=0° تكون F=0.'},
+  {id:147,cat:'mag',type:'tf',text:'يعمل المحرك الكهربائي على تحويل الطاقة الكهربائية إلى طاقة حركية.',ans:false,exp:'خطأ — المحرك يحول الكهربائية إلى ميكانيكية. المولد هو الذي يحول الميكانيكية إلى كهربائية.'},
+  {id:148,cat:'semi',type:'tf',text:'تتراوح فجوة الطاقة في المواد العازلة عادة بين 5 eV و 9 eV.',ans:true,exp:'صح — فجوة الطاقة في العوازل بين 5-9 eV مما يمنع انتقال الإلكترونات.'},
+  {id:149,cat:'semi',type:'tf',text:'تعتبر ذرة الجاليوم (Ga) ذرة مانحة عند إضافتها لبلورة السيليكون.',ans:false,exp:'خطأ — الجاليوم ثلاثي التكافؤ وهو ذرة قابلة (مستقبلة) تُنتج النوع p، وليست مانحة.'},
+  {id:150,cat:'mag',type:'tf',text:'وحدة قياس شدة المجال المغناطيسي في النظام الدولي هي التسلا (T).',ans:true,exp:'صح — وحدة شدة المجال المغناطيسي B هي التسلا (T) = N/(A·m).'},
+  {id:151,cat:'mag',type:'tf',text:'لتحويل الجلفانومتر إلى أميتر، يتم توصيل مقاومة كبيرة جداً معه على التوالي.',ans:false,exp:'خطأ — لتحويل الجلفانومتر إلى أميتر تُوصل مقاومة صغيرة جداً (شنت) معه على التوازي.'},
+];
+
+let answered = {};
+let curFilter = 'all';
+let currentPage = 0;
+let comments = [];
+
+function getFiltered() {
+  return curFilter === 'all' ? Q : Q.filter(q => q.cat === curFilter);
+}
+
+function getTotalPages() {
+  return Math.max(1, Math.ceil(getFiltered().length / PAGE_SIZE));
+}
+
+function updateStats() {
+  const qs = getFiltered();
+  let cor = 0, wrg = 0;
+  qs.forEach(q => {
+    if (answered[q.id] === 'correct') cor++;
+    else if (answered[q.id] === 'wrong') wrg++;
+  });
+  const ans = cor + wrg;
+  document.getElementById('sc-ans').textContent = ans;
+  document.getElementById('sc-cor').textContent = cor;
+  document.getElementById('sc-wrg').textContent = wrg;
+  document.getElementById('sc-pct').textContent = ans > 0 ? Math.round(cor/ans*100) + '%' : '—';
+  document.getElementById('prog-fill').style.width = qs.length > 0 ? Math.round(ans/qs.length*100) + '%' : '0%';
+  document.getElementById('prog-txt').textContent = ans + ' من ' + qs.length + ' سؤال';
+  document.getElementById('total-count').textContent = Q.length;
+  document.getElementById('mc-count').textContent = Q.filter(q=>q.type==='mc').length;
+  document.getElementById('tf-count').textContent = Q.filter(q=>q.type==='tf').length;
+
+  const allDone = qs.length > 0 && ans === qs.length;
+  const panel = document.getElementById('results-panel');
+  if (allDone) {
+    panel.classList.add('show');
+    document.getElementById('res-pct').textContent = Math.round(cor/qs.length*100) + '%';
+    document.getElementById('res-total').textContent = qs.length;
+    document.getElementById('res-cor').textContent = cor;
+    document.getElementById('res-wrg').textContent = wrg;
+  } else {
+    panel.classList.remove('show');
+  }
+}
+
+const catLabels = {em:'الكهرومغناطيسية',mag:'المغناطيس',wave:'الموجات',atom:'الذرة والكم',semi:'أشباه الموصلات',nuc:'الفيزياء النووية',cur:'الدوائر الكهربائية'};
+const catBadge  = {em:'b-em',mag:'b-mag',wave:'b-wave',atom:'b-atom',semi:'b-semi',nuc:'b-nuc',cur:'b-cur'};
+
+function renderPage() {
+  const allQs = getFiltered();
+  const totalPages = getTotalPages();
+  if (currentPage >= totalPages) currentPage = totalPages - 1;
+  const start = currentPage * PAGE_SIZE;
+  const pageQs = allQs.slice(start, start + PAGE_SIZE);
+  const container = document.getElementById('quiz');
+  container.innerHTML = '';
+
+  // group by category
+  const sections = {};
+  pageQs.forEach(q => { if (!sections[q.cat]) sections[q.cat] = []; sections[q.cat].push(q); });
+
+  let globalIdx = start;
+  Object.keys(sections).forEach(cat => {
+    const sh = document.createElement('div');
+    sh.innerHTML = `<div class="section-head"><div class="section-head-line"></div><div class="section-head-title">${catLabels[cat]||cat}</div><div class="section-head-line"></div></div>`;
+    container.appendChild(sh);
+    sections[cat].forEach(q => {
+      globalIdx++;
+      const state = answered[q.id];
+      const cardClass = state ? (state==='correct'?'correct':'wrong') : '';
+      const typeLabel = q.type==='mc'?'اختيار':'صح/خطأ';
+      const typeBadge = q.type==='mc'?'b-mc':'b-tf';
+      let bodyHtml = '';
+      if (q.type === 'mc') {
+        bodyHtml = '<div class="opts">';
+        q.opts.forEach((opt,i) => {
+          let cls = 'opt';
+          if (state) {
+            if (i===q.ans) cls += ' correct-ans';
+            else if (answered[q.id+'_sel']===i && i!==q.ans) cls += ' wrong-ans';
+          }
+          bodyHtml += `<button class="${cls}" onclick="answerMC(${q.id},${i},${q.ans})" ${state?'disabled':''}>${opt}</button>`;
+        });
+        bodyHtml += '</div>';
+      } else {
+        let tcls='tfb', fcls='tfb';
+        if (state) {
+          if (q.ans===true) { tcls+=' correct-ans'; fcls+=' wrong-ans'; }
+          else { fcls+=' correct-ans'; tcls+=' wrong-ans'; }
+        }
+        bodyHtml = `<div class="tf-row">
+          <button class="${tcls}" onclick="answerTF(${q.id},true,${q.ans})" ${state?'disabled':''}>✓ صح</button>
+          <button class="${fcls}" onclick="answerTF(${q.id},false,${q.ans})" ${state?'disabled':''}>✗ خطأ</button>
+        </div>`;
+      }
+      let expHtml = '';
+      if (state) {
+        const ok = state==='correct';
+        expHtml = `<div class="explanation ${ok?'ok':'bad'}"><strong>${ok?'✓ ممتاز!':'✗ الإجابة الصحيحة:'}</strong> ${q.exp}</div>`;
+      }
+      const wrap = document.createElement('div');
+      wrap.className = 'q-wrap';
+      wrap.innerHTML = `<div class="q-card ${cardClass}">
+        <div class="q-meta">
+          <span class="badge ${catBadge[q.cat]||'b-mc'}">${catLabels[q.cat]||q.cat}</span>
+          <span class="badge ${typeBadge}">${typeLabel}</span>
+          <span class="q-num">سؤال ${globalIdx}</span>
+        </div>
+        <div class="q-text">${q.text}</div>
+        ${bodyHtml}${expHtml}
+      </div>`;
+      container.appendChild(wrap);
+    });
+  });
+
+  // pagination
+  document.getElementById('page-info').textContent = `الأسئلة ${start+1}–${Math.min(start+PAGE_SIZE,allQs.length)} من ${allQs.length} | الجزء ${currentPage+1} من ${totalPages}`;
+  document.getElementById('pag-bottom').innerHTML = `
+    <button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===0?'disabled':''}>→ السابق</button>
+    <span class="page-num">${currentPage+1} / ${totalPages}</span>
+    <button class="page-btn primary" onclick="goPage(${currentPage+1})" ${currentPage>=totalPages-1?'disabled':''}>التالي ←</button>
+  `;
+  updateStats();
+}
+
+function goPage(p) {
+  const t = getTotalPages();
+  if (p < 0 || p >= t) return;
+  currentPage = p;
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderPage();
+}
+
+function answerMC(id, sel, ans) {
+  if (answered[id]) return;
+  answered[id+'_sel'] = sel;
+  answered[id] = sel===ans ? 'correct' : 'wrong';
+  renderPage();
+}
+
+function answerTF(id, sel, ans) {
+  if (answered[id]) return;
+  answered[id] = sel===ans ? 'correct' : 'wrong';
+  renderPage();
+}
+
+function setFilter(f, btn) {
+  curFilter = f;
+  currentPage = 0;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPage();
+}
+
+function resetAll() {
+  if (!confirm('هل تريد إعادة تعيين جميع الإجابات والبدء من جديد؟')) return;
+  answered = {};
+  currentPage = 0;
+  window.scrollTo({top:0,behavior:'smooth'});
+  renderPage();
+}
+
+function submitComment() {
+  const text = document.getElementById('comment-text').value.trim();
+  if (!text) return;
+  const now = new Date();
+  const t = now.toLocaleDateString('ar-SA') + ' — ' + now.toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'});
+  comments.unshift({text, time: t});
+  document.getElementById('comment-text').value = '';
+  renderComments();
+}
+
+function renderComments() {
+  const list = document.getElementById('comments-list');
+  list.innerHTML = comments.map(c=>`<div class="comment-item">${c.text}<div class="comment-time">${c.time}</div></div>`).join('');
+}
+
+renderPage();
+</script>
+
+<script data-goatcounter="https://h3i2bownw.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
