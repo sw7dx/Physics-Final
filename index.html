@@ -122,7 +122,6 @@
   .footer-meta{font-size:12px;color:var(--text-muted);}
   .footer-copy{font-size:12px;color:var(--text-muted);}
 </style>
-<base target="_blank">
 </head>
 <body>
 
@@ -269,11 +268,16 @@ const Q = [
   {id:75,cat:'mag',type:'mc',text:'عندما يسري تياران في سلكين متوازيين في نفس الاتجاه، فإن القوة بينهما:',opts:['قوة تنافر','قوة تجاذب','قوة دافعة كهربائية','صفر'],ans:1,exp:'تياران في نفس الاتجاه → تجاذب.'},
   {id:76,cat:'mag',type:'mc',text:'الجزء المسؤول عن عكس اتجاه التيار في ملف المحرك الكهربائي:',opts:['المغناطيس الدائم','الفرشاة','قلب الحديد','الحلقة المشقوقة (عاكس التيار)'],ans:3,exp:'الحلقة المشقوقة (Commutator) تعكس اتجاه التيار كل نصف دورة.'},
   {id:77,cat:'mag',type:'mc',text:'إذا تحرك إلكترون في مجال مغناطيسي عمودياً، اتجاه القوة المؤثرة عليه:',opts:['نفس اتجاه قاعدة اليد اليمنى','معاكس لاتجاه قاعدة اليد اليمنى','موازٍ لاتجاه حركته','موازٍ للمجال'],ans:1,exp:'الإلكترون شحنة سالبة → القوة معاكسة لقاعدة اليد اليمنى.'},
+  {id:78,cat:'cur',type:'mc',text:'إذا كان المنصهر الكهربائي يتحمل تياراً مقداره 15A ومر تيار مقداره 20A، فماذا يحدث؟',opts:['تنصهر قطعة الفلز وتفتح الدائرة','تزداد مقاومة الدائرة ويستمر التيار','يتحمل التيار الزائد إلى جهد كهربائي','لا يحدث شيء'],ans:0,exp:'عند مرور تيار أكبر من قيمة المنصهر، تنصهر قطعة الفلز الداخلية فتفتح الدائرة وتحميها من التلف.'},
+  {id:79,cat:'cur',type:'mc',text:'يُصمم الفولتميتر بحيث تكون مقاومته الداخلية:',opts:['مساوية لمقاومة الجهاز المراد قياسه','صغيرة جداً لكي يكون الخطأ في تيار المار فيه أقل ما يمكن','كبيرة جداً لكي لا يؤثر على الدائرة','صفراً'],ans:2,exp:'الفولتميتر يوصل على التوازي، ويجب أن تكون مقاومته الداخلية كبيرة جداً لكي يسحب أقل تيار ممكن ولا يؤثر على قياس الدائرة.'},
+  {id:81,cat:'mag',type:'mc',text:'أي المواد التالية تُستخدم عادة لصناعة المغانط الدائمة القوية؟',opts:['الحديد المطاوع والكربون','النحاس والزنك','سبيكة من الألومنيوم والنيكل والكوبالت','البلاستيك والخشب'],ans:2,exp:'سبيكة الألنيكو (Al-Ni-Co) من الألومنيوم والنيكل والكوبالت تُستخدم لصناعة المغانط الدائمة القوية.'},
+  {id:83,cat:'mag',type:'mc',text:'ماذا يحدث لخطوط المجال المغناطيسي خارج المغناطيس؟',opts:['تتقاطع مع بعضها البعض','تخرج من القطب الشمالي وتدخل إلى الجنوبي','تكون خطوطاً مستقيمة متوازية دائماً','تخرج من القطب الجنوبي وتدخل إلى الشمالي'],ans:1,exp:'خطوط المجال المغناطيسي خارج المغناطيس تخرج من القطب الشمالي وتدخل إلى القطب الجنوبي.'},
+  {id:84,cat:'mag',type:'mc',text:'من العالم الذي اكتشف في عام 1820م أن التيار الكهربائي يولد مجالاً مغناطيسياً؟',opts:['مايكل فاراداي','أندريه أمبير','هانز كريستيان أورستد','إسحاق نيوتن'],ans:2,exp:'أورستد اكتشف عام 1820م أن التيار الكهربائي يولد مجالاً مغناطيسياً، وكانت بداية علم الكهرومغناطيسية.'},
+  {id:87,cat:'mag',type:'mc',text:'لتحويل الجلفانومتر إلى فولتميتر، يتم توصيل مقاومة:',opts:['صغيرة جداً على التوالي','كبيرة جداً على التوالي (مجزئ الجهد)','صفرية على التوازي','كبيرة جداً على التوازي'],ans:1,exp:'لتحويل الجلفانومتر إلى فولتميتر، توصل مقاومة كبيرة جداً على التوالي معه (مجزئ الجهد) لتقليل التيار المار وتوسيع نطاق قياس الجهد.'},
 
   // ══ صح وخطأ — من الورقة بدون علامة ! ══
   {id:100,cat:'em',type:'tf',text:'القوة الدافعة الكهربائية الحثية (FME) هي في الواقع قوة تُقاس بوحدة النيوتن.',ans:false,exp:'خطأ — FME قوة دافعة كهربائية تُقاس بالفولت (V) وليس النيوتن.'},
   {id:101,cat:'em',type:'tf',text:'يتولد تيار كهربائي حثي في سلك عندما يتحرك موازياً لخطوط المجال المغناطيسي.',ans:false,exp:'خطأ — التيار الحثي يتولد فقط عند الحركة العمودية أو بزاوية على المجال، لا الموازية.'},
-  {id:102,cat:'em',type:'tf',text:'يعمل الميكروفون على تحويل الموجات الصوتية إلى نبضات كهربائية باستخدام مبدأ الحث الكهرومغناطيسي.',ans:true,exp:'صح — الميكروفون الديناميكي يعمل بمبدأ الحث الكهرومغناطيسي.'},
   {id:103,cat:'em',type:'tf',text:'متوسط القدرة ACp في مولد التيار المتناوب يساوي نصف القدرة العظمى AC,max P.',ans:true,exp:'صح — P_avg = P_max/2 للتيار المتناوب الجيبي.'},
   {id:104,cat:'wave',type:'tf',text:'تنتج الموجات الكهرومغناطيسية عن تسارع الشحنات الكهربائية.',ans:true,exp:'صح — الشحنات المتسارعة مصدر الموجات الكهرومغناطيسية.'},
   {id:105,cat:'em',type:'tf',text:'في أنبوب تومسون، القوة المغناطيسية المؤثرة في الإلكترون تكون موازية لاتجاه حركته.',ans:false,exp:'خطأ — القوة المغناطيسية دائماً عمودية على اتجاه الحركة.'},
@@ -323,11 +327,11 @@ const Q = [
   {id:149,cat:'semi',type:'tf',text:'تعتبر ذرة الجاليوم (Ga) ذرة مانحة عند إضافتها لبلورة السيليكون.',ans:false,exp:'خطأ — الجاليوم ثلاثي التكافؤ وهو ذرة قابلة (مستقبلة) تُنتج النوع p، وليست مانحة.'},
   {id:150,cat:'mag',type:'tf',text:'وحدة قياس شدة المجال المغناطيسي في النظام الدولي هي التسلا (T).',ans:true,exp:'صح — وحدة شدة المجال المغناطيسي B هي التسلا (T) = N/(A·m).'},
   {id:151,cat:'mag',type:'tf',text:'لتحويل الجلفانومتر إلى أميتر، يتم توصيل مقاومة كبيرة جداً معه على التوالي.',ans:false,exp:'خطأ — لتحويل الجلفانومتر إلى أميتر تُوصل مقاومة صغيرة جداً (شنت) معه على التوازي.'},
-  {id:152,cat:'em',type:'tf',text:'وجد العالم جوزيف هنري أن تغير المجال المغناطيسي يمكن أن يولد تياراً كهربائياً في نفس السنة التي اكتشف فيها فاراداي ذلك.',ans:true,exp:'صح — هنري اكتشف الحث الكهرومغناطيسي بشكل مستقل في نفس الفترة.'},
-  {id:153,cat:'semi',type:'tf',text:'نموذج (إلكترون-غاز) يصف حركة الإلكترونات في الموصلات الفلزية.',ans:true,exp:'صح — نموذج الإلكترون-غاز يفسر حركة الإلكترونات الحرة في الفلزات.'},
-  {id:154,cat:'nuc',type:'tf',text:'تحتاج تفاعلات الاندماج النووي إلى درجات حرارة منخفضة جداً لكي تحدث.',ans:false,exp:'خطأ — الاندماج النووي يحتاج إلى درجات حرارة عالية جداً (ملايين الدرجات) للتغلب على التنافر الكهروستاتيكي.'},
-  {id:155,cat:'semi',type:'tf',text:'تعمل المجسات الحرارية (Thermistors) المصنوعة من أشباه الموصلات على زيادة مقاومتها عند ارتفاع درجة الحرارة.',ans:false,exp:'خطأ — المجسات الحرارية من أشباه الموصلات تقل مقاومتها عند ارتفاع درجة الحرارة (معامل درجة الحرارة سالب).'},
-  {id:156,cat:'nuc',type:'tf',text:'القوة النووية الضعيفة هي المسؤولة عن اضمحلال بيتا داخل النواة.',ans:true,exp:'صح — القوة النووية الضعيفة تسبب تحول النيوترون إلى بروتون أو العكس (اضمحلال بيتا).'},
+  {id:152,cat:'atom',type:'tf',text:'طيف الانبعاث هو مجموعة من الأطوال الموجية المميزة التي تنبعث عند تحليل الضوء الصادر عن غاز ساخن.',ans:true,exp:'صح — طيف الانبعاث ينتج عند تسخين غاز وتحليل ضوئه إلى خطوط طيفية مميزة لكل عنصر.'},
+  {id:153,cat:'semi',type:'tf',text:'تُعرف الطبقة الفاصلة في الدايود التي تخلو من ناقلات الشحنة باسم طبقة النضوب.',ans:true,exp:'صح — طبقة النضوب (Depletion Layer) هي المنطقة الفاصلة في الدايود الخالية من الفجوات والإلكترونات الحرة.'},
+  {id:154,cat:'nuc',type:'tf',text:'عند انبعاث جسيم بيتا، ينقص العدد الكتلي للنواة بمقدار واحد.',ans:false,exp:'خطأ — عند انبعاث جسيم بيتا (إلكترون) لا يتغير العدد الكتلي A، بل يزداد العدد الذري Z بمقدار واحد فقط.'},
+  {id:155,cat:'cur',type:'tf',text:'الموصلات فائقة التوصيل تعمل بكفاءة عالية فقط عند درجات حرارة منخفضة جداً قريبة من الصفر المطلق.',ans:true,exp:'صح — الموصلات فائقة التوصيل تفقد مقاومتها الكهربائية تماماً عند درجات حرارة منخفضة جداً قريبة من الصفر المطلق.'},
+
 ];
 
 let answered = {};
@@ -392,7 +396,7 @@ function renderPage() {
   let globalIdx = start;
   Object.keys(sections).forEach(cat => {
     const sh = document.createElement('div');
-    sh.innerHTML = <div class="section-head"><div class="section-head-line"></div><div class="section-head-title">${catLabels[cat]||cat}</div><div class="section-head-line"></div></div>;
+    sh.innerHTML = `<div class="section-head"><div class="section-head-line"></div><div class="section-head-title">${catLabels[cat]||cat}</div><div class="section-head-line"></div></div>`;
     container.appendChild(sh);
     sections[cat].forEach(q => {
       globalIdx++;
@@ -409,7 +413,7 @@ function renderPage() {
             if (i===q.ans) cls += ' correct-ans';
             else if (answered[q.id+'_sel']===i && i!==q.ans) cls += ' wrong-ans';
           }
-          bodyHtml += <button class="${cls}" onclick="answerMC(${q.id},${i},${q.ans})" ${state?'disabled':''}>${opt}</button>;
+          bodyHtml += `<button class="${cls}" onclick="answerMC(${q.id},${i},${q.ans})" ${state?'disabled':''}>${opt}</button>`;
         });
         bodyHtml += '</div>';
       } else {
@@ -418,19 +422,19 @@ function renderPage() {
           if (q.ans===true) { tcls+=' correct-ans'; fcls+=' wrong-ans'; }
           else { fcls+=' correct-ans'; tcls+=' wrong-ans'; }
         }
-        bodyHtml = <div class="tf-row">
+        bodyHtml = `<div class="tf-row">
           <button class="${tcls}" onclick="answerTF(${q.id},true,${q.ans})" ${state?'disabled':''}>✓ صح</button>
           <button class="${fcls}" onclick="answerTF(${q.id},false,${q.ans})" ${state?'disabled':''}>✗ خطأ</button>
-        </div>;
+        </div>`;
       }
       let expHtml = '';
       if (state) {
         const ok = state==='correct';
-        expHtml = <div class="explanation ${ok?'ok':'bad'}"><strong>${ok?'✓ ممتاز!':'✗ الإجابة الصحيحة:'}</strong> ${q.exp}</div>;
+        expHtml = `<div class="explanation ${ok?'ok':'bad'}"><strong>${ok?'✓ ممتاز!':'✗ الإجابة الصحيحة:'}</strong> ${q.exp}</div>`;
       }
       const wrap = document.createElement('div');
       wrap.className = 'q-wrap';
-      wrap.innerHTML = <div class="q-card ${cardClass}">
+      wrap.innerHTML = `<div class="q-card ${cardClass}">
         <div class="q-meta">
           <span class="badge ${catBadge[q.cat]||'b-mc'}">${catLabels[q.cat]||q.cat}</span>
           <span class="badge ${typeBadge}">${typeLabel}</span>
@@ -438,18 +442,18 @@ function renderPage() {
         </div>
         <div class="q-text">${q.text}</div>
         ${bodyHtml}${expHtml}
-      </div>;
+      </div>`;
       container.appendChild(wrap);
     });
   });
 
   // pagination
-  document.getElementById('page-info').textContent = الأسئلة ${start+1}–${Math.min(start+PAGE_SIZE,allQs.length)} من ${allQs.length} | الجزء ${currentPage+1} من ${totalPages};
-  document.getElementById('pag-bottom').innerHTML = 
+  document.getElementById('page-info').textContent = `الأسئلة ${start+1}–${Math.min(start+PAGE_SIZE,allQs.length)} من ${allQs.length} | الجزء ${currentPage+1} من ${totalPages}`;
+  document.getElementById('pag-bottom').innerHTML = `
     <button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===0?'disabled':''}>→ السابق</button>
     <span class="page-num">${currentPage+1} / ${totalPages}</span>
     <button class="page-btn primary" onclick="goPage(${currentPage+1})" ${currentPage>=totalPages-1?'disabled':''}>التالي ←</button>
-  ;
+  `;
   updateStats();
 }
 
@@ -496,4 +500,4 @@ renderPage();
 <script data-goatcounter="https://h3i2bownw.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>
-    </html>
+</html>
